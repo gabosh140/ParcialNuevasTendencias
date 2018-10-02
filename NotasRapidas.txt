@@ -1,0 +1,66 @@
+Que es Arquitectura
+
+La organización fundamental de un sistema, reflejada en sus componentes, relaciones entre ellos y el ambiente, y los principios que gobiernan su diseño y evolución.
+• Captura la estructura del sistema en términos de componentes y cómo interactúan.
+• Define reglas de diseño y evolución globales al sistema. 
+• Componentes, módulos, objetos o cualquier otra unidad de software inter-relacionada.
+
+Validacion
+
+• Durante el proceso de creación de la arquitectura, el objetivo de la fase de validación consiste en aumentar la confianza del equipo de diseño con respecto a que la arquitectura es adecuada para cumplir con los requerimientos del sistema. 
+• Aunque se puede estar actuando sobre un sistema existente o nuevo al final el resultado del modelado es un diseño de AS por lo que el proceso de validación puede ser el mismo para ambos casos. 
+• Se puede escoger entre dos técnicas: Pruebas manuales o Prototipos. 
+
+MVC 
+Desventajas:
+
+• El código se convierte en una bola de nieve si no está organizado en módulos o los roles no están bien definidos • Se puede caer en el  anti patrón embudo, es cuando el código solo se dedica a pasar data a través de las capas sin usar ninguna lógica. 
+• El aislamiento de capas puede ser difícil de entender sin entender cada módulo. 
+• Los desarrolladores pueden saltar capas  y crear acoplamientos fuertes creando una red compleja de interdependencias. • El despliegue monolítico es inevitable, un cambio requiere desplegar toda la aplicación.
+
+MicroKernel
+
+Cuando la aplicación tiene un conjunto básico de operaciones que se utilizan frecuentemente y dependen de la data y las tareas hechas a mano. Ejemplo: Eclipse abre archivos, los modifica los compila y los ejecuta En este caso las rutinas básicas para manipular los archivos son la parte de microkernel.
+Se pueden agregar funcionalidad extra a la cual se les llama plug-ins, alguno le llamas arquitectura extensible o plug-in
+
+Desventajas: 
+
+Decidir que pertenece al microkernel y que no, normalmente el codigo mas usado El plug-in debe tener codigo que permita integrarse al microkernel, para validar que esta instalado y listo para ser usado
+• Modificar el microkernel puede ser difícil cuando hay varios plugins, el cambio debe validarse en los plugins también. • Escoger el nivel de granularidad para las funciones del kernel puede ser difícil y hace muy difícil poder cambiarlo en el futuro.
+
+Ventajas:
+
+• Herramienta de uso común • Aplicaciones con una visión clara de rutinas básicas y reglas ordenadas. • Aplicaciones con un grupo de rutinas y una grupo variable de reglas que se deben actualizar frecuentemente.
+
+MicroServicios
+
+ El software puede ser fácil y divertido cuando es pequeño pero es difícil y resistente al cambio cuando crece. • La arquitectura de microservicios se orienta a evitar que la funcionalidad del código crezca indefinidamente, se haga monolítica e inflexible. • En lugar de construir un gran programa se crear varios programas pequeños y construir un nuevo programa pequeño cuando se necesita nueva funcionalidad. • Por ejemplo cuando se ve la interfase Netflix en un iPad cada porción de la interfase viene de un servicio separado. Lista de favoritos, ratings, información de la cuenta, etc. Netflix es una constelación de varios websites que se presentan como un solo servicio. • Los servicios requieren distintos niveles de carga, por ejemplo fin de semana en Netflix hay mayor carga y debe estar listo para escalar. Los servicios pueden escalar o reducirse independientemente ante los cambios de demanda
+
+Pipe And Filter- Cómo mejorar la eficiencia?
+
+Puertos y filtros tipados 
+Cada puerto, y en consecuencia el tubo que a este se conecta, transmite un tipo de dato (posiblemente) diferente al de otros puertos, incluso del mismo filtro. Entonces se dice que el puerto tiene un tipo o es de cierto tipo; lo mismo ocurre con los tubos. De esta forma, si un puerto tiene tipo T solo podrá conectarse a un tubo del mismo tipo. El tubo tiene el mismo tipo en sus dos extremos (pues de otra forma implicaría que el tubo lleva a cabo una conversión de tipo violando uno de los invariantes esenciales del estilo).
+Si bien esta especialización puede dar lugar a menor flexibilidad (ya que ahora los filtros dependen más del contexto que antes) permite mejorar la eficiencia en la transmisión de información pues no requiere que los filtros hagan una y otra vez conversiones de datos. Por ejemplo, si por un tubo viajan únicamente caracteres que son dígitos entonces el tubo se define de tipo entero y por lo tanto los filtros a sus extremos emiten y reciben enteros sin necesidad de hacer conversiones.
+Además, reduce la posibilidad de errores de programación al habilitar un uso más extendido de tipos. El compilador podrá detectar que por un puerto de tipo T1 se está intentando enviar un dato de tipo T2.
+
+Cliente Servidor(N Tier)
+
+Disponibilidad: Réplica de servidores en cada capa, si uno falla, los otros responden. La calidad del servicio disminuye hasta restaurar el servidor fallado.
+Manejo de Fallas: La mayoría de servidores web y de aplicación implementan una recuperación transparente (el cliente es redireccionado a un servidor  replicado para responder la solicitud). 
+Flexibilidad: La modularidad facilita el cambio, debido a la encapsulación (presentación, negocios y datos). El impacto del cambio al interior de una  capa debería ser mínimo en las otras. Desempeño: Alto desempeño mediante replicación de software (threads concurrentes), velocidad de la conexión entre las capas y la cantidad de datos a ser transferidos. Es recomendable minimizar las llamadas entre las capas al procesar cada solicitud. 
+Escalabilidad: Como los servidores pueden replicarse, la arquitectura escala bien. En la práctica, la gestión de datos se convierte en el cuello de botella.
+
+Pipe and filter
+
+Disponibilidad: Replicación de colas en varias instancias de servidor. Cuando una falla, los clientes envían mensajes a as colas replicadas. 
+Manejo de Fallas: Si la comunicación con la cola falla, existen colas replicadas donde el mensaje puede ser almacenado. Flexibilidad: Mensajería es inherentemente desacoplada, los clientes y servidores no se relacionan directamente. Cambios al formato del mensaje de parte del cliente requiere cambios al tratamiento por parte del servi- dor. Formatos auto-descriptivos reducen esta dependencia (XML) 
+Desempeño: Alto. Soporta miles de mensajes por segundo. Según la calidad de la tecnología de envío de mensajes, mensajería no con?able es más  rápida. 
+Escalabilidad: Alta. Las colas pueden alojarse en puntos extremos de la comunicación, o estar replicados en clusters o servidores de mensajería alojados en una o varias máquinas.
+
+Publisher Subscriber:
+
+Disponibilidad: Temas con el mismo nombre lógico pueden replicarse en varias instancias de servidores (cluster). Cuando un servidor falla, los editores  envían mensajes a las colas replicadas. 
+Manejo de Fallas: Si un servidor falla, el mensaje puede ser tomado por otro servidor replicado.
+Flexibilidad: Alta. Debido al débil acoplamiento entre sus componentes pueden agregarse nuevos editores y subscriptores sin cambiar la arquitectura  o la con?guración. 
+Desempeño: Alto. Soporta miles de mensajes por segundo. Según la calidad de la tecnología de envío de mensajes, mensajería no con?able es más  rápida. 
+Escalabilidad: Alta. Los topics pueden replicarse en clusters de servidores.
